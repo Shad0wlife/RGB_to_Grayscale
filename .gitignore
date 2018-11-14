@@ -1,0 +1,6 @@
+bin
+.settings
+.externalToolBuilders
+.project
+.classpath
+*.jar
