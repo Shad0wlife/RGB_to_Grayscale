@@ -1,5 +1,3 @@
-package bv.gruppeB.projekt3;
-
 /**
  * Enum for Luma coefficients for different colorspaces
  */

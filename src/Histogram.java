@@ -1,15 +1,15 @@
-package bv.gruppeB.projekt3;
-
 import ij.process.ImageProcessor;
 
 public class Histogram {
 	
 	private int[] histogram = new int[256];
+	private double[] normedHistogram = new double[256];
 	private double mean;
 	private double variance;
 	private double skewness;
 	private double kurtosis;
 	private double entropy;
+	private long numPixels;
 	
 	/**
 	 * Creates the basic histogram structure by binning the image's pixels
@@ -27,6 +27,11 @@ public class Histogram {
 			System.out.println(cnt + ", " + histogram[cnt]);
 		}
 		//END DEBUG
+		
+		numPixels = ip.getPixelCount();
+		for(int cnt = 0; cnt < histogram.length; cnt++) {
+			normedHistogram[cnt] = (double)histogram[cnt]/(double)numPixels;
+		}
 		
 		mean = calculateMean();
 		variance = calculateNthMoment(Moment.VARIANCE);
@@ -90,12 +95,10 @@ public class Histogram {
 	 */
 	private double calculateMean() {
 		double sum = 0.0;
-		long numPx = 0L;
-		for(int cnt = 0; cnt < histogram.length; cnt++) {
-			numPx += histogram[cnt];
-			sum += histogram[cnt] * cnt;
+		for(int cnt = 0; cnt < normedHistogram.length; cnt++) {
+			sum += normedHistogram[cnt] * cnt;
 		}
-		return sum/numPx;
+		return sum;
 	}
 	
 	/**
@@ -107,8 +110,8 @@ public class Histogram {
 	 */
 	private double calculateNthMoment(Moment moment) {
 		double sum = 0.0;
-		for(int cnt = 0; cnt < histogram.length; cnt++) {
-			sum += Math.pow(cnt - mean, moment.getExponent()) * histogram[cnt];
+		for(int cnt = 0; cnt < normedHistogram.length; cnt++) {
+			sum += Math.pow(cnt - mean, moment.getExponent()) * normedHistogram[cnt];
 		}
 		switch (moment) {
 		case KURTOSIS:
@@ -128,7 +131,10 @@ public class Histogram {
 	private double calculateEntropy() {
 		double sum = 0.0;
 		for(int cnt = 0; cnt < histogram.length; cnt++) {
-			sum += histogram[cnt] * Tools.log2(histogram[cnt]);
+			double histval = normedHistogram[cnt];
+			if(histval > 0) {
+				sum += normedHistogram[cnt] * Tools.log2(normedHistogram[cnt]);
+			}
 		}
 		return -sum;
 	}

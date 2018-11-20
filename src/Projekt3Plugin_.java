@@ -1,11 +1,9 @@
-package bv.gruppeB.projekt3;
-
 import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 
 public class Projekt3Plugin_ implements PlugInFilter{
-
+	
 	@Override
 	public int setup(String arg, ImagePlus imp) {
 		// TODO Auto-generated method stub
@@ -17,6 +15,7 @@ public class Projekt3Plugin_ implements PlugInFilter{
 		//Execution incomplete - sample code below
 		convertToGreyscaleClassic(ip, Colorspace.BT709);
 		Histogram histogram = new Histogram(ip);
+		System.out.println("Entropie: " + histogram.getEntropy());
 	}
 	
 	

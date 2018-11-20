@@ -1,5 +1,3 @@
-package bv.gruppeB.projekt3;
-
 public class Tools {
 
 	/**
